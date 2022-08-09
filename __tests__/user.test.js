@@ -39,6 +39,13 @@ describe('backend-express-template routes', () => {
       email,
     });
   });
+  it('sign in an existing user', async () => {
+    await request(app).post('/api/v1/users').send(testUser);
+    const res = await request(app)
+      .post('/api/v1/users/sessions')
+      .send({ email: 'abc@123.com', password: 'abc123' });
+    expect(res.status).toEqual(200);
+  });
   afterAll(() => {
     pool.end();
   });
