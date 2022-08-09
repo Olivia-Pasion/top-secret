@@ -50,6 +50,11 @@ describe('backend-express-template routes', () => {
     const res = await request(app).get('/api/v1/users/protected');
     expect(res.status).toEqual(401);
   });
+  it('/protected should return the current user if authenticated', async () => {
+    const [agent] = await registerAndLogin();
+    const res = await agent.get('/api/v1/users/protected');
+    expect(res.status).toEqual(200);
+  });
   afterAll(() => {
     pool.end();
   });
