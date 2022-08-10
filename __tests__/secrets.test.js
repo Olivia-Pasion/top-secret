@@ -11,6 +11,11 @@ const testUser = {
   password: 'abc123'
 };
 
+const testSecret = {
+  title: 'hello',
+  description: 'hey hi hello',
+};
+
 const registerAndLogin = async (userProps = {})  => {
   const password = userProps.password ?? testUser.password;
 
@@ -33,6 +38,17 @@ describe('backend-express-template routes', () => {
     const [agent] = await registerAndLogin();
     const res = await agent.get('/api/v1/secrets');
     expect(res.status).toEqual(200);
+  });
+  it('#POST /secrets, users can post secrets', async () => {
+    const res = await request(app).post('/api/v1/secrets').send(testSecret);
+    const { title, description, created_at } = testSecret;
+
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      title,
+      description,
+      created_at,
+    });
   });
 
   afterAll(() => {
