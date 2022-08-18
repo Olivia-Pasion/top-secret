@@ -38,16 +38,25 @@ describe('backend-express-template routes', () => {
     const [agent] = await registerAndLogin();
     const res = await agent.get('/api/v1/secrets');
     expect(res.status).toEqual(200);
+    expect(res.body.length).toEqual(1),
+    expect(res.body[0]).toEqual({
+      id: expect.any(String),
+      title: expect.any(String),
+      description: expect.any(String),
+      created_at: expect.any(String)
+    });
   });
   it('#POST /secrets, users can post secrets', async () => {
-    const res = await request(app).post('/api/v1/secrets').send(testSecret);
-    const { title, description, created_at } = testSecret;
+    const [agent] = await registerAndLogin();
+    
+    const res = await agent.post('/api/v1/secrets').send(testSecret);
+    const { title, description } = testSecret;
 
     expect(res.body).toEqual({
       id: expect.any(String),
       title,
       description,
-      created_at,
+      created_at: expect.any(String),
     });
   });
 
